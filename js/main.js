@@ -46,10 +46,15 @@ Array.from(keys).forEach(key => {
                     break
                 case '=':
                     clickedEquals = true
+
                     prevDisplayResult.textContent = ''
 
                     if (!(displayString.length === 1 && OPERATORS.includes(displayString))) {
                         calculateSoFar(displayString)
+
+                        if (calculatedSoFar === Infinity) {
+                            calculatedSoFar = 'Math error'
+                        }
                     }
                     
                     displayString = calculatedSoFar
