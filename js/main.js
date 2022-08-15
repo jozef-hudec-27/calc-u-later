@@ -1,4 +1,4 @@
-const OPERATORS = ['+', '−', '×', '÷']
+const OPERATORS = ['+', '−', '×', '÷', '^']
 
 
 const keys = document.querySelectorAll('.key')
@@ -12,7 +12,7 @@ const prevDisplayResult = document.querySelector('#calc-display > .prev-display-
 
 Array.from(keys).forEach(key => {
     key.addEventListener('click', e => {
-        const keyVal = key.textContent
+        const keyVal = Array.from(key.classList).includes('exponent-func') ? '^' : key.textContent
 
         if (clickedEquals && keyVal !== 'AC' && '0123456789'.includes(keyVal) === false) {
             return
@@ -78,6 +78,9 @@ function calculateSoFar(str) { // we calculate new result only when we click '='
             break
         case '÷':
             calculatedSoFar /= num
+            break
+        case '^':
+            calculatedSoFar = calculatedSoFar ** num
             break
         default:
             calculatedSoFar += num
