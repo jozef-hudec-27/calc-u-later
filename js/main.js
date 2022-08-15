@@ -14,11 +14,13 @@ Array.from(keys).forEach(key => {
     key.addEventListener('click', e => {
         const keyVal = key.textContent
 
-        if (clickedEquals && keyVal !== 'AC') {
+        if (clickedEquals && keyVal !== 'AC' && '0123456789'.includes(keyVal) === false) {
             return
         }
 
         if ('0123456789,'.includes(keyVal)) {
+            if (clickedEquals) clearCalc()
+
             displayString += key.textContent   
             currentInput.textContent = displayString 
         } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent)) {
@@ -34,11 +36,7 @@ Array.from(keys).forEach(key => {
         } else {
             switch(keyVal) {
                 case 'AC':
-                    calculatedSoFar = 0
-                    displayString = ''
-                    currentInput.textContent = displayString
-                    clickedEquals = false
-                    prevDisplayResult.textContent = ''
+                    clearCalc()
                     break
                 case '⇚':
                     displayString = displayString.slice(0, displayString.length-1)
@@ -84,4 +82,12 @@ function calculateSoFar(str) { // we calculate new result only when we click '='
         default:
             calculatedSoFar += num
     }
+}
+
+function clearCalc() {
+    calculatedSoFar = 0
+    displayString = ''
+    currentInput.textContent = displayString
+    clickedEquals = false
+    prevDisplayResult.textContent = ''
 }
