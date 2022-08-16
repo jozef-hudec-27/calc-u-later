@@ -1,5 +1,5 @@
 const OPERATORS = ['+', '−', '×', '÷', '^']
-
+const MAX_DIGITS = 15
 
 const keys = document.querySelectorAll('.key')
 
@@ -21,7 +21,13 @@ Array.from(keys).forEach(key => {
         if ('0123456789,'.includes(keyVal)) {
             if (clickedEquals) clearCalc()
 
-            displayString += key.textContent   
+            // if the number on the screen is 15 digits
+            if (( OPERATORS.includes(displayString[0]) && displayString.length-1 === MAX_DIGITS ) ||
+                ( !OPERATORS.includes(displayString[0]) && displayString.length === MAX_DIGITS  )) {
+                    return
+            }
+
+            displayString += keyVal 
             currentInput.textContent = displayString 
         } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent)) {
             let prevDisplayString = displayString.slice()
