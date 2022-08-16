@@ -44,7 +44,11 @@ Array.from(keys).forEach(key => {
             }
 
             displayString += keyVal 
-        } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent)) {
+        } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent || keyVal === '−')) {
+            if (keyVal === '−') {
+                document.querySelector('.kbd-0').click()
+            }
+
             let prevDisplayString = displayString.slice()
 
             // if we already had an operator in the input but decided to change it, skip these next lines
@@ -86,10 +90,10 @@ Array.from(keys).forEach(key => {
                         calculateSoFar(displayString)
                     }
 
-                    if (calculatedSoFar === Infinity) {
+                    if (calculatedSoFar === Infinity || isNaN(calculatedSoFar)) {
                         calculatedSoFar = 'Math error'
                     }
-                    
+
                     displayString = calculatedSoFar.toString()
                     break
             }
