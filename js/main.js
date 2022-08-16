@@ -1,5 +1,6 @@
 const OPERATORS = ['+', '−', '×', '÷', '^']
 const MAX_DIGITS = 15
+const MAX_DECIMALS = 9
 
 const keys = document.querySelectorAll('.key')
 
@@ -48,7 +49,18 @@ Array.from(keys).forEach(key => {
                     displayString = displayString.slice(0, displayString.length-1)
                     currentInput.textContent = displayString    
                     break
-                case '%':
+                case '.':
+                    if (displayString.includes('.')) return
+
+                    if (!displayString) {
+                        displayString = '0.'
+                    } else if (OPERATORS.includes(displayString)) {
+                        displayString = `${displayString}0.`
+                    } else {
+                        displayString += keyVal
+                    }
+
+                    currentInput.textContent = displayString
                     break
                 case '=':
                     clickedEquals = true
@@ -74,6 +86,9 @@ Array.from(keys).forEach(key => {
 
 
 function getNumberFromString(numStr) {
+    if (( numStr.length === 1 && numStr === '.' ) ||
+        ( numStr.length === 2 && OPERATORS.includes(numStr[0]) && numStr[1] === '.' )) return 0
+    
     return OPERATORS.includes(numStr[0]) ? +numStr.slice(1) : +numStr
 }
 
@@ -96,6 +111,8 @@ function calculateSoFar(str) { // we calculate new result only when we click '='
         default:
             calculatedSoFar += num
     }
+
+    calculatedSoFar = Math.round(calculatedSoFar * (10 ** MAX_DECIMALS)) / (10 ** MAX_DECIMALS)
 }
 
 function clearCalc() {
