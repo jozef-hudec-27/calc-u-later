@@ -12,14 +12,14 @@ const currentInput = document.querySelector('#calc-display > .current-display-in
 const prevDisplayResult = document.querySelector('#calc-display > .prev-display-result')
 
 Array.from(keys).forEach(key => {
-    key.addEventListener('click', e => {
+    key.addEventListener('click', () => {
         const keyVal = Array.from(key.classList).includes('exponent-func') ? '^' : key.textContent
 
         if (clickedEquals && keyVal !== 'AC' && '0123456789'.includes(keyVal) === false) {
             return
         }
 
-        if ('0123456789,'.includes(keyVal)) {
+        if ('0123456789'.includes(keyVal)) {
             if (clickedEquals) clearCalc()
 
             // if the number on the screen is 15 digits
@@ -29,25 +29,23 @@ Array.from(keys).forEach(key => {
             }
 
             displayString += keyVal 
-            currentInput.textContent = displayString 
         } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent)) {
             let prevDisplayString = displayString.slice()
 
+            // if we already had an operator in the input but decided to change it, skip these next lines
             if (!(prevDisplayString.length === 1 && OPERATORS.includes(prevDisplayString))) {
                 calculateSoFar(prevDisplayString)
                 prevDisplayResult.textContent = calculatedSoFar
             }
 
             displayString = keyVal
-            currentInput.textContent = displayString 
         } else {
             switch(keyVal) {
                 case 'AC':
                     clearCalc()
-                    break
+                    return
                 case '⇚':
                     displayString = displayString.slice(0, displayString.length-1)
-                    currentInput.textContent = displayString    
                     break
                 case '.':
                     if (displayString.includes('.')) return
@@ -60,35 +58,32 @@ Array.from(keys).forEach(key => {
                         displayString += keyVal
                     }
 
-                    currentInput.textContent = displayString
                     break
                 case '=':
                     clickedEquals = true
 
                     prevDisplayResult.textContent = ''
 
-                    if (!(displayString.length === 1 && OPERATORS.includes(displayString))) {
+                    // if we clicked '=' while only having an operator in the input, skip this line
+                    if (!OPERATORS.includes(displayString)) {
                         calculateSoFar(displayString)
+                    }
 
-                        if (calculatedSoFar === Infinity) {
-                            calculatedSoFar = 'Math error'
-                        }
+                    if (calculatedSoFar === Infinity) {
+                        calculatedSoFar = 'Math error'
                     }
                     
                     displayString = calculatedSoFar
-                    currentInput.textContent = displayString
                     break
             }
         }
 
+        currentInput.textContent = displayString
     })
 })
 
 
 function getNumberFromString(numStr) {
-    if (( numStr.length === 1 && numStr === '.' ) ||
-        ( numStr.length === 2 && OPERATORS.includes(numStr[0]) && numStr[1] === '.' )) return 0
-    
     return OPERATORS.includes(numStr[0]) ? +numStr.slice(1) : +numStr
 }
 
@@ -118,7 +113,7 @@ function calculateSoFar(str) { // we calculate new result only when we click '='
 function clearCalc() {
     calculatedSoFar = 0
     displayString = ''
-    currentInput.textContent = displayString
+    currentInput.textContent = ''
     clickedEquals = false
     prevDisplayResult.textContent = ''
 }
