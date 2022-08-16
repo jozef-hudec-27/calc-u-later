@@ -75,6 +75,8 @@ Array.from(keys).forEach(key => {
 
                     break
                 case '=':
+                    if (!displayString) return
+
                     clickedEquals = true
 
                     prevDisplayResult.textContent = ''
@@ -132,3 +134,22 @@ function clearCalc() {
     clickedEquals = false
     prevDisplayResult.textContent = ''
 }
+
+document.addEventListener('keydown', e => {
+    // if we're tabbing through the page we don't want to use this at the same time
+    if (document.activeElement?.classList.value.includes('key')) return
+
+    const keyExceptions = { '+': 'plus', '-': 'minus', '*': 'multiply', '/': 'slash' }
+
+    let pressed = e.key
+
+    if (pressed in keyExceptions) {
+        pressed = keyExceptions[pressed]
+    }
+
+    const key = document.querySelector(`.kbd-${pressed}`)
+
+    if (key) {
+        key.click()
+    }
+})
