@@ -44,6 +44,7 @@ body {
     height: inherit;
     display: flex;
     flex-wrap: wrap;
+    column-gap: 12px;
     justify-content: space-evenly;
     align-items: center;
     align-content: space-evenly;
@@ -66,9 +67,10 @@ body {
     font-size: 2em;
     border-radius: 50%;
     cursor: pointer;
+    padding: 0;
 }
 
-.key:hover {
+.key:hover, .key:focus-within {
     background-color: rgb(97, 97, 97);
 }
 
@@ -76,7 +78,7 @@ body {
     background-color: darkorange;
 }
 
-.key:nth-child(4n+4):hover {
+.key:nth-child(4n+4):hover, .key:nth-child(4n+4):focus-within {
     background-color: orange;
 }
 
@@ -86,7 +88,7 @@ body {
     color: black;
 }
 
-.key:nth-child(-n+3):hover {
+.key:nth-child(-n+3):hover, .key:nth-child(-n+3):focus-within {
     background-color: lightgrey;
     color: black;
 }
