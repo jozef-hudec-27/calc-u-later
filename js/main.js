@@ -15,7 +15,22 @@ Array.from(keys).forEach(key => {
     key.addEventListener('click', () => {
         const keyVal = Array.from(key.classList).includes('exponent-func') ? '^' : key.textContent
 
-        if (clickedEquals && keyVal !== 'AC' && '0123456789'.includes(keyVal) === false) {
+        if (clickedEquals && OPERATORS.includes(keyVal)) {
+            const calculated = calculatedSoFar
+            clearCalc()
+
+            if (calculated !== 'Math error') {
+                calculatedSoFar = calculated
+                prevDisplayString = calculated
+                prevDisplayResult.textContent = prevDisplayString
+            }
+        }
+
+        if (clickedEquals && keyVal === '.') {
+            clearCalc()
+        }
+
+        if (clickedEquals && ['⇚', '='].includes(keyVal)) {
             return
         }
 
@@ -73,7 +88,7 @@ Array.from(keys).forEach(key => {
                         calculatedSoFar = 'Math error'
                     }
                     
-                    displayString = calculatedSoFar
+                    displayString = calculatedSoFar.toString()
                     break
             }
         }
