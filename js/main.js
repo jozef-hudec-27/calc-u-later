@@ -45,7 +45,7 @@ Array.from(keys).forEach(key => {
 
             displayString += keyVal;
         } else if (OPERATORS.includes(keyVal) && (displayString || prevDisplayResult.textContent || keyVal === '−')) {
-            if (keyVal === '−') {
+            if (keyVal === '−' && !displayString) {
                 document.querySelector('.kbd-0').click();
             };
 
